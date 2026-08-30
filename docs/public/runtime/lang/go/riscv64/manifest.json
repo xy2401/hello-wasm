@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "runtimeId": "lang/go",
+  "targetArch": "riscv64",
+  "runtimeVersion": "go version go1.25.10 linux/riscv64",
+  "systemVersion": "Alpine Linux 3.23",
+  "container2wasmVersion": "0.8.4",
+  "createdAt": "2026-08-30T04:29:53.644Z",
+  "totalRawSize": 468017485,
+  "chunks": [
+    {
+      "filename": "runtime-c86cd368287b-part-00.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5937305,
+      "sha256": "3adc138e0a56a63f60bdef1128cd141d7af8fd94c2e63baa0f96a9f801296161"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-01.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4413839,
+      "sha256": "7a11e79226f0bfe19e22e51bd050ba4ee2d6662e3030a01de5ae266ce9490ad0"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-02.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2683556,
+      "sha256": "591d211a11118c06c8c20968e1990eac059a48c6f42b8ef64f3cc4b7102337cb"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-03.gz",
+      "rawSize": 10485760,
+      "compressedSize": 768959,
+      "sha256": "91be303b58004368191051bcb30c3f108b93c02ca1dcc25522c8155550fbf330"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-04.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3267518,
+      "sha256": "8dfc78c80aab0eef527abbe8e054bd5635ff7a21c2d5dc0076f2139475d180f7"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-05.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4080870,
+      "sha256": "0155a90a1b793c2926ff420b9b9eee3bf2b027b8b6d92af87174a62cdeb33992"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-06.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4046318,
+      "sha256": "331d1178ee7a307aeef3fc0a66c0a42699f214c81ba5efed272c4657171b9885"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-07.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4006510,
+      "sha256": "1a4be2275bc9f25edb25db60e0ae4e00399de4b99836e450a0dd6b979378d10c"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-08.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4257524,
+      "sha256": "03c53fdb4eb9b7a73da0ff72a82e0564bd69c1369db4d2949cebc450b924f2ad"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-09.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2412358,
+      "sha256": "ca811439eac81cce3baf23d394b6fc0d594a57cebac3047f11fe0c28f4d55b91"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-10.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3122083,
+      "sha256": "a049e4d27e5dc69a8e4ad11e447daad0e6eeed97ced50f17c29b9db393f7dd0c"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-11.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2252995,
+      "sha256": "56182c64d1bac5b933647f6be60d298b17f4cd8be718b6b6880214cf641b107c"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-12.gz",
+      "rawSize": 10485760,
+      "compressedSize": 1878408,
+      "sha256": "ef61c49ed29bf473dc5abfd516b6b9e2b69ab4d82256cdc2eb054c706c09415c"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-13.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2008284,
+      "sha256": "16fbddb5b875050605528fccfdf7074007734369000b9dc64408b19d2424fe30"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-14.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2275261,
+      "sha256": "96d4d79f5ac16029f194c7b4b76fc7c087b9630569ec253ecaa4fb1b82ee1037"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-15.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3688620,
+      "sha256": "6eaf0bc7be3418cb39d49107d35251bdfcf136663075f5eaaf39eeac58626e5c"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-16.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5767285,
+      "sha256": "f722dfcdd8011d7864c03563c45cc7f041796fcdfd0227e32c4d79e9707b7177"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-17.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3765832,
+      "sha256": "c28d961e0427df5cfe4c6208c72e24c76bc26df33128e3b1780979594cf4bd36"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-18.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5085244,
+      "sha256": "3a32b936d5f87913a9a8e55ba9a675b0815315517866a214c0e9c1aafb477528"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-19.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4386051,
+      "sha256": "7efc9d1c3113310fcc7960465846fa34939af9aea2c3a502791c2b51c0915bb7"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-20.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3026775,
+      "sha256": "538e7c409d36cc5a553dc12e0fa17ce1d09bf3cb216c00a5a3584b0110d590bf"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-21.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3831462,
+      "sha256": "a5bc3ee087aadc917357a3c0684b776e56f80b08b3581d3ae970a407d0a6df5c"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-22.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2839447,
+      "sha256": "16830a6f3e13b129189691a28b143db71fde2066855ee5522f56ce6acd7ca424"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-23.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4328761,
+      "sha256": "d69e20db999cd090d9542dcc89655ae55b286d3dfbd723ba976c607d861359fd"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-24.gz",
+      "rawSize": 10485760,
+      "compressedSize": 6791210,
+      "sha256": "afbdb12574411135e48aec0997507312e818d5186f472c2ba66dbd80ac11fefd"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-25.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2921982,
+      "sha256": "1ac109e98ebf85c4124911909da445799d264539ef5b430bf21dcf3ef1105561"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-26.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4506801,
+      "sha256": "a9f6417b7a9d73d59aa5e9a9034c783b45227d90e4c444a5ee2eac1433013b57"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-27.gz",
+      "rawSize": 10485760,
+      "compressedSize": 1979595,
+      "sha256": "5b13ee2741fcdfa95c44439c0572a3ddea238b1968e76d83c17f940ce2079b5d"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-28.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4188559,
+      "sha256": "85b7a85a0df7e3cd683107495eceb71f4acc8c532c9ef9b9c5cd5475499c839f"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-29.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5417669,
+      "sha256": "35ddc3b3a7d2695675803c615f40a0cd004474269352f9abb83577a662138c28"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-30.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3968657,
+      "sha256": "f709edd67e6af6921eebb9405fe575c2d6568f53560d498b6e855ad295c96e05"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-31.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3373558,
+      "sha256": "c46e277992cde20957be6968b00848b046c64f71bef18cf0ed2d1a3c1e986458"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-32.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3345735,
+      "sha256": "15da633328aff709df9d092b703798ec668a1fb5ab4f17719785e877e064eea8"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-33.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3176432,
+      "sha256": "5621ffed6c48f76e75e4968037481e9376c3ad5e16c1058b39dc322bc1fac4a7"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-34.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2634527,
+      "sha256": "27163e4a475a3762724019cbd5058106db3724ead0d23b310632f3bb0cf4bc58"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-35.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2218032,
+      "sha256": "3f300ddc3155b5480a979ff40cd96c6880863ae47a225a0901c6de7447ed27fc"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-36.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2159618,
+      "sha256": "13793a6d8356e1bdebd6716b46e4f1c959cb57287bcd858804ccc608b956b30c"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-37.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3171969,
+      "sha256": "6671c5991a857b257a2a863630bab80635392ec35ca7c0f6bffb95730ed88919"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-38.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4658084,
+      "sha256": "c047ddf4b797e7fab7f3c8653e85b3b55fe19b4dc03b359cbce56a93148698c8"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-39.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3367579,
+      "sha256": "3d17e620278e1b37dadc3fed1f18d93df307119850e5824c136b4d495b4811f3"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-40.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2172660,
+      "sha256": "e8e653541e5b08cd844d2e68de541892f9fcb0972378bb1fd08636fd7249d1c5"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-41.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3953748,
+      "sha256": "5b859df16f8b3b54ad3d0a272c329dea605f513d9fdd6223a09cabbccb2b1bbc"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-42.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5488101,
+      "sha256": "ff2dc88940581bf3e7d72a2a09dc23971377ea3bd7d078427b335360afcb70c1"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-43.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4650310,
+      "sha256": "9dddcf7f904ede8e550a0c1137be9dd82b7d9d1713e050a824102e8b1d7640f9"
+    },
+    {
+      "filename": "runtime-c86cd368287b-part-44.gz",
+      "rawSize": 6644045,
+      "compressedSize": 2387699,
+      "sha256": "0abc779c123819e500cc7694a284334df12274bb2959cffabb9ef3025fa44896"
+    }
+  ]
+}

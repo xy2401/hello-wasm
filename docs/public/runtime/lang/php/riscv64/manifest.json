@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "runtimeId": "lang/php",
+  "targetArch": "riscv64",
+  "runtimeVersion": "PHP 8.4.21 (cli) (built: May  7 2026 16:01:59) (NTS)",
+  "systemVersion": "Alpine Linux 3.23",
+  "container2wasmVersion": "0.8.4",
+  "createdAt": "2026-08-30T04:40:13.055Z",
+  "totalRawSize": 80734656,
+  "chunks": [
+    {
+      "filename": "runtime-c692cae49166-part-00.gz",
+      "rawSize": 10485760,
+      "compressedSize": 6496913,
+      "sha256": "90d56dabc5f17b6762790aa4a9701f98d38a64c1f4317c3ab521cf90eaca53d1"
+    },
+    {
+      "filename": "runtime-c692cae49166-part-01.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4605680,
+      "sha256": "dc2cf53b15ca1780f9fcf58ba52e1d794c241c1a2e7491ac333a5f9fadee699d"
+    },
+    {
+      "filename": "runtime-c692cae49166-part-02.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3751888,
+      "sha256": "b8ab4c161f523e500ecbe244fcd5ab904aaa6466398f3d45cf9340210e557d01"
+    },
+    {
+      "filename": "runtime-c692cae49166-part-03.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5692325,
+      "sha256": "14912ed86c08ca672ab0a70a599bc80f604925d94b307c240a27e2f382f6ed4c"
+    },
+    {
+      "filename": "runtime-c692cae49166-part-04.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5026624,
+      "sha256": "dd144c469645be3b2da6ed12738a8a693711310febc353944f405ba622507ce3"
+    },
+    {
+      "filename": "runtime-c692cae49166-part-05.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5578828,
+      "sha256": "c66f041120d03e21ae7380e22868354982bc007ff7097a270ac15ff6d855e1da"
+    },
+    {
+      "filename": "runtime-c692cae49166-part-06.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4717612,
+      "sha256": "583617311af9cf82c41626469826265e7708d8c750fa66a7c30a26edc0e6dce1"
+    },
+    {
+      "filename": "runtime-c692cae49166-part-07.gz",
+      "rawSize": 7334336,
+      "compressedSize": 2809215,
+      "sha256": "4b709d610ede32779c21eafd1d8c683c470194563e981ecb67e78aceb11d75f7"
+    }
+  ]
+}

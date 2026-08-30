@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "runtimeId": "lang/python",
+  "targetArch": "riscv64",
+  "runtimeVersion": "Python 3.12.14",
+  "systemVersion": "Alpine Linux 3.23",
+  "container2wasmVersion": "0.8.4",
+  "createdAt": "2026-08-30T04:26:15.315Z",
+  "totalRawSize": 132960060,
+  "chunks": [
+    {
+      "filename": "runtime-96fb055db779-part-00.gz",
+      "rawSize": 10485760,
+      "compressedSize": 6374656,
+      "sha256": "ded8597291615c0bf647f900257e46a954d89bdf59c936b061fec93cf1faaf0c"
+    },
+    {
+      "filename": "runtime-96fb055db779-part-01.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4572790,
+      "sha256": "02d3f8f4e99958ad50e9cef478d3ae2c27d74d70e5d603f63456eff4d0b5edab"
+    },
+    {
+      "filename": "runtime-96fb055db779-part-02.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3397963,
+      "sha256": "b421a30c2fcdd5886b4e2686914d54aaa08058d3fac01e40da2b03a233607cd7"
+    },
+    {
+      "filename": "runtime-96fb055db779-part-03.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3319140,
+      "sha256": "1c3cd8d2afe78a7b9e7ed3a95b8940a97f84770489842e261e58d41d8e05319b"
+    },
+    {
+      "filename": "runtime-96fb055db779-part-04.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4128162,
+      "sha256": "547c24f6f5d4846423c2a0d822b56b1524863241b8d014281210d5d40d2542ec"
+    },
+    {
+      "filename": "runtime-96fb055db779-part-05.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5738711,
+      "sha256": "a26a4739ae717c0ac0346e7e7a0320904233d71e69c122ba60c41347fce1ab55"
+    },
+    {
+      "filename": "runtime-96fb055db779-part-06.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4805181,
+      "sha256": "e89bd458758903049dec36f20ec95a1cebdee6789f1f20f30d611a7c7a0a9dc0"
+    },
+    {
+      "filename": "runtime-96fb055db779-part-07.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4972711,
+      "sha256": "d61c88c2719343f5b649d287b29862af9943060a57e50617435fda26e2af2264"
+    },
+    {
+      "filename": "runtime-96fb055db779-part-08.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3582693,
+      "sha256": "a990053be1d8d9de20bda7ad879ef9c7d1d779905e917875c3ca3aa4710fe3d1"
+    },
+    {
+      "filename": "runtime-96fb055db779-part-09.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3892700,
+      "sha256": "b4c7af59fe196280122eaa015583e868c072998166c5e4a44d3b84daf60c41ae"
+    },
+    {
+      "filename": "runtime-96fb055db779-part-10.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5044398,
+      "sha256": "25aba9f4ed805d90b851bdfb9ce6146d09bf50bcd7107b98a8bd41feabe4152e"
+    },
+    {
+      "filename": "runtime-96fb055db779-part-11.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4672333,
+      "sha256": "aeb1b792b9f66dc6ffbf2c099c79b9f74141cf5bc5d1fa03a159032a30ab3aba"
+    },
+    {
+      "filename": "runtime-96fb055db779-part-12.gz",
+      "rawSize": 7130940,
+      "compressedSize": 2684849,
+      "sha256": "250dbf75f63f0c29560f828d203c00a734a84554430bad198f881ec68327bb7d"
+    }
+  ]
+}

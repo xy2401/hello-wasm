@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "runtimeId": "lang/node",
+  "targetArch": "riscv64",
+  "runtimeVersion": "Node v24.18.1 TypeScript 7.0.2 Pug 3.0.4 html-validate 11.10.0 Sass 1.103.1 PostCSS 8.5.26 postcss-cli 11.0.1 Autoprefixer 10.5.4 Stylelint 17.14.1",
+  "systemVersion": "Alpine Linux 3.23",
+  "container2wasmVersion": "0.8.4",
+  "createdAt": "2026-08-30T13:51:53.375Z",
+  "totalRawSize": 212599388,
+  "chunks": [
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-00.gz",
+      "rawSize": 10485760,
+      "compressedSize": 6204102,
+      "sha256": "eb130bac86cf2237bd06e01c0839ba8ed445efd93751d26dab268d0627433bc5"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-01.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4436639,
+      "sha256": "5967311752cb857797dd9b2e915d004da632c8de45b072d19a81955f0f4f837f"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-02.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3108443,
+      "sha256": "ef6f7b84ab274de0ce4b20ba7936c77b7013c91516410c9d0b8a2997e4c97b52"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-03.gz",
+      "rawSize": 10485760,
+      "compressedSize": 1722484,
+      "sha256": "644e0c588e3ceaf5077508f1bbd4fd9b01655fdae9efe829f8699f962fd5fde1"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-04.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3063894,
+      "sha256": "b4aac20c8dd68728f0eec0d905dfe7227dfbdd381e02c871e2bd2e7b7627c912"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-05.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3518559,
+      "sha256": "210b3becfc5b75ce6efad340e3c2d08c784f8b54d90a2fab85a883b1778deedd"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-06.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3429441,
+      "sha256": "8e44a54a7077685a2573d433029e48ffeddeefecb2e9c015f5af85be0541298a"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-07.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2146160,
+      "sha256": "583611d40f55788eb81691aa692c16555d62a894fec5a042a38c39c330bef642"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-08.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2527598,
+      "sha256": "e36843a02736fc67af8c1954388c9bfea01a2e671ef4a3b12e2a098e6f504cc6"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-09.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2005668,
+      "sha256": "cc3e8d826183573d61213a10a6dc958f5ba4d78eece23514ee6f7eb573c55bab"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-10.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5005670,
+      "sha256": "13fd7c5f1dec8ecafcc8ff8d9e4df5cc4d2f8cd678f3b1ec942591720e7bd9de"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-11.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5545815,
+      "sha256": "da0643963c1001ddf2e8d2c13663c0984ab64ee9590749066bde88b3ca13cadb"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-12.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5695552,
+      "sha256": "606e0545f449f44d3e29285daaa916d31b4bf20b459cf51236fef20b6008e632"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-13.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3801451,
+      "sha256": "638a6890d7fa25bb512121d1933a86c9aa79bfbf77eaf43669ccbc7439f2e1e5"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-14.gz",
+      "rawSize": 10485760,
+      "compressedSize": 2922174,
+      "sha256": "8a63ddad090e21e2488ada3e16210f1637e592102cbb123cfe80f026cfbf5c1a"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-15.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4333421,
+      "sha256": "d229678fdd7c9af0519a3389accb1b4517bb14950e1780d7b2eea48a216970c2"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-16.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4582512,
+      "sha256": "06ad88e059627e2474e8e0f4137ccc9814bb29aff6da0d8161eacb88ddc027da"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-17.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5218196,
+      "sha256": "406da5065e72936422975b194fa5668d3a6c9d95cbc079a2ee7a96ac1f3fd963"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-18.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5397977,
+      "sha256": "c0eb32286109f78f15ae1e8d68747cc3bad59fcbaaacacf68da898e97be14cd6"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-19.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4485950,
+      "sha256": "041c481068863c415e8d5e1f8b69dc3be2605fc47641d768e81bd7749ad83193"
+    },
+    {
+      "filename": "runtime-aa3dd1fcb13a-part-20.gz",
+      "rawSize": 2884188,
+      "compressedSize": 726525,
+      "sha256": "1a315e31ea547f8b345dac6d9e50e3c66e29fb96e9f1b80e0a43ba07dbc02b4b"
+    }
+  ]
+}

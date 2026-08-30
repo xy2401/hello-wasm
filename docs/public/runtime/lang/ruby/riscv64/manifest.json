@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "runtimeId": "lang/ruby",
+  "targetArch": "riscv64",
+  "runtimeVersion": "ruby 3.4.9 (2026-03-11 revision 76cca827ab) +PRISM [riscv64-linux-musl]",
+  "systemVersion": "Alpine Linux 3.23",
+  "container2wasmVersion": "0.8.4",
+  "createdAt": "2026-08-30T04:47:22.574Z",
+  "totalRawSize": 91759666,
+  "chunks": [
+    {
+      "filename": "runtime-a10a5fc57014-part-00.gz",
+      "rawSize": 10485760,
+      "compressedSize": 6482824,
+      "sha256": "99961d56c9d0e3f3033b6922848250d6156a0ed053333bfdebce86ae2ffe3794"
+    },
+    {
+      "filename": "runtime-a10a5fc57014-part-01.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4587660,
+      "sha256": "3e399ee7feeee5c14caa3dfc07cfdfa9958b2616a63e4d97ba9642fde96080d4"
+    },
+    {
+      "filename": "runtime-a10a5fc57014-part-02.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3376249,
+      "sha256": "874ee6448b4053b16123d0620336081478cd136c46a17bb7160b361bf4116128"
+    },
+    {
+      "filename": "runtime-a10a5fc57014-part-03.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5039856,
+      "sha256": "07ad5b2d90bfd64d46c0a2c61238c9fec80b6194a79d9c2688d0b751920fe5a3"
+    },
+    {
+      "filename": "runtime-a10a5fc57014-part-04.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5229116,
+      "sha256": "54296669b9ad0bb593cfa91bcec2c573860c286484e54300276acd31b68c0e56"
+    },
+    {
+      "filename": "runtime-a10a5fc57014-part-05.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5179365,
+      "sha256": "ff00969ec11d48af383dcbf70673868bb138dd6f138b7b658b24ca00eb47be5b"
+    },
+    {
+      "filename": "runtime-a10a5fc57014-part-06.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4161340,
+      "sha256": "8ea8bfa227790e505df449ed5b22cf981e91911838c831c02d28742fdb7fdc14"
+    },
+    {
+      "filename": "runtime-a10a5fc57014-part-07.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5042926,
+      "sha256": "ceec1067892ac6e31a51e870027a0a7239546997f92d0e7d3c8fe13bfe43dd6f"
+    },
+    {
+      "filename": "runtime-a10a5fc57014-part-08.gz",
+      "rawSize": 7873586,
+      "compressedSize": 2878140,
+      "sha256": "0d712676b1271e9a5a99e567d868d36fa62b456a8cd8931f2c1bf8595d906840"
+    }
+  ]
+}
