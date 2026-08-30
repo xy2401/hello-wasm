@@ -1,3 +1,7 @@
+---
+aside: false
+---
+
 # JVM Playground
 
 一份 RISC-V 64 资产同时提供 Java、Kotlin、Groovy、Scala 与 Clojure。各语言示例从工具栏选择，启动容器时只下载一次 JVM 工具链。

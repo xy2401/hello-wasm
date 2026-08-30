@@ -1,3 +1,7 @@
+---
+aside: false
+---
+
 # Playground
 
 每个页面对应一份实际发布的 RISC-V 64 运行时资产。打开页面不会下载容器；只有点击“启动容器”后，才会读取 manifest、校验 gzip 分片并启动环境。

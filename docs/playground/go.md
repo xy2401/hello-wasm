@@ -1,3 +1,7 @@
+---
+aside: false
+---
+
 # Go Playground
 
 在 RISC-V 64 Linux 中直接运行、构建并检查 Go 产物。

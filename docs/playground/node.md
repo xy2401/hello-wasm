@@ -1,3 +1,7 @@
+---
+aside: false
+---
+
 # Node Playground
 
 一份 RISC-V 64 资产提供 JavaScript、TypeScript 与 HTML/CSS 工程工具。它既能直接执行 Node.js 脚本，也能演示 Pug、Sass 和 PostCSS 的源码转换流程。

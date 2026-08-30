@@ -5,6 +5,38 @@
   --vp-c-brand-soft: rgba(20, 184, 166, 0.14);
 }
 
+/* Keep the header in the same centered layout on home and sidebar pages. */
+@media (min-width: 960px) {
+  html .VPNavBar.has-sidebar.has-sidebar .wrapper {
+    padding: 0 32px;
+  }
+
+  html .VPNavBar.has-sidebar.has-sidebar .container {
+    max-width: calc(var(--vp-layout-max-width) - 64px);
+  }
+
+  html .VPNavBar.has-sidebar.has-sidebar .container > .title {
+    position: static;
+    padding: 0;
+    width: auto;
+    height: calc(var(--vp-nav-height) - 1px);
+  }
+
+  html .VPNavBar.has-sidebar.has-sidebar .container > .content {
+    position: static;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  html .VPNavBar.has-sidebar.has-sidebar .divider {
+    padding-left: 0;
+  }
+
+  html .VPNavBar.has-sidebar.has-sidebar .VPNavBarTitle.has-sidebar .title {
+    border-bottom-color: transparent;
+  }
+}
+
 .VPNavBarTitle .title {
   letter-spacing: -0.01em;
 }

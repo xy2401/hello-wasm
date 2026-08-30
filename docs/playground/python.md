@@ -1,3 +1,7 @@
+---
+aside: false
+---
+
 # Python Playground
 
 在 RISC-V 64 Alpine Linux 中运行 CPython、脚本和交互式解释器。

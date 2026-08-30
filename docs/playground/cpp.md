@@ -1,3 +1,7 @@
+---
+aside: false
+---
+
 # C & C++ Playground
 
 在同一份 RISC-V 64 资产中使用 GCC、G++ 和 Clang，编译并执行本机 RISC-V 64 产物。

@@ -1,3 +1,7 @@
+---
+aside: false
+---
+
 # PHP Playground
 
 在 RISC-V 64 Alpine Linux 中运行 PHP CLI 脚本和交互模式。

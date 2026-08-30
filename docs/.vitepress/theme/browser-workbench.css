@@ -32,6 +32,12 @@ html.dark {
   box-shadow: 0 14px 36px rgb(15 23 42 / 8%);
 }
 
+.VPDoc:has(.shell-workbench) .container,
+.VPDoc:has(.shell-workbench) .content,
+.VPDoc:has(.shell-workbench) .content-container {
+  max-width: none;
+}
+
 .workbench-header {
   display: flex;
   min-height: 2.2rem;
