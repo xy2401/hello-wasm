@@ -34,10 +34,11 @@ html.dark {
 
 .workbench-header {
   display: flex;
+  min-height: 2.2rem;
   align-items: center;
   justify-content: space-between;
-  gap: 1.2rem;
-  padding: .68rem 1rem;
+  gap: .75rem;
+  padding: .35rem .75rem;
   background: linear-gradient(125deg, var(--vp-c-bg-soft), var(--vp-c-bg));
 }
 
@@ -45,7 +46,7 @@ html.dark {
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: .45rem;
+  gap: .4rem;
   color: var(--vp-c-text-3);
   font-size: .72rem;
   white-space: nowrap;
@@ -53,34 +54,35 @@ html.dark {
 
 .workbench-identity a {
   color: var(--vp-c-text-2);
-  font-weight: 650;
+  font-weight: 600;
   text-decoration: none;
 }
 
 .workbench-identity a:hover { color: var(--wb-accent); }
-.workbench-identity strong { color: var(--vp-c-text-1); font-size: .78rem; }
+.workbench-identity strong { color: var(--vp-c-text-1); font-size: .75rem; }
 
 .workbench-status {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
-  gap: .42rem;
+  gap: .35rem;
   border: 1px solid var(--vp-c-divider);
   border-radius: 999px;
-  padding: .42rem .68rem;
+  padding: .22rem .55rem;
   background: var(--vp-c-bg);
   color: var(--vp-c-text-2);
   cursor: pointer;
-  font-size: .7rem;
-  font-weight: 750;
+  font-size: .65rem;
+  font-weight: 650;
+  line-height: 1.2;
 }
 
 .workbench-status:hover:not(:disabled) { border-color: var(--wb-accent); color: var(--wb-accent); }
 .workbench-status:disabled { cursor: progress; opacity: .75; }
-.workbench-status i { width: .45rem; height: .45rem; border-radius: 50%; background: #94a3b8; }
+.workbench-status i { width: .38rem; height: .38rem; border-radius: 50%; background: #94a3b8; }
 .workbench-status.downloading i,
 .workbench-status.initializing i { background: #f59e0b; }
-.workbench-status.running i { background: #10b981; box-shadow: 0 0 0 4px rgb(16 185 129 / 14%); }
+.workbench-status.running i { background: #10b981; box-shadow: 0 0 0 3px rgb(16 185 129 / 14%); }
 .workbench-status.unavailable i { background: #f59e0b; }
 .workbench-status.error i { background: #ef4444; }
 
