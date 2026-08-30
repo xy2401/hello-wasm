@@ -1,0 +1,175 @@
+name: build-lang-riscv64-runtimes
+
+on:
+  workflow_dispatch:
+    inputs:
+      runtime:
+        description: Runtime to build
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - jvm
+          - node
+          - python
+          - cpp
+          - go
+          - rust
+          - php
+          - ruby
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hello-wasm-riscv64-main
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      runtimes: ${{ steps.matrix.outputs.runtimes }}
+    steps:
+      - id: matrix
+        env:
+          SELECTED: ${{ inputs.runtime || 'all' }}
+        run: |
+          if [ "$SELECTED" = all ]; then
+            echo 'runtimes=["jvm","node","python","cpp","go","rust","php","ruby"]' >> "$GITHUB_OUTPUT"
+          else
+            printf 'runtimes=["%s"]\n' "$SELECTED" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        runtime: ${{ fromJson(needs.prepare.outputs.runtimes) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - uses: docker/setup-qemu-action@v3
+        with:
+          platforms: riscv64
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Install container2wasm
+        run: |
+          curl -fsSL https://github.com/container2wasm/container2wasm/releases/download/v0.8.4/container2wasm-v0.8.4-linux-amd64.tar.gz | sudo tar -xz -C /usr/local/bin
+          sudo chmod +x /usr/local/bin/c2w
+          c2w --version
+
+      - name: Build RISC-V 64 language image
+        env:
+          RUNTIME: ${{ matrix.runtime }}
+        run: |
+          set -o pipefail
+          docker buildx build \
+            --platform linux/riscv64 \
+            --build-arg RUNTIME="$RUNTIME" \
+            --build-arg KOTLIN_VERSION=2.3.20 \
+            --file runtimes/lang/Dockerfile \
+            --tag "hello-wasm-lang-$RUNTIME:rv64" \
+            --load .
+          docker run --rm --platform linux/riscv64 "hello-wasm-lang-$RUNTIME:rv64" hello-lang-version | tee runtime-version.txt
+
+      - name: Verify toolchain without network
+        env:
+          RUNTIME: ${{ matrix.runtime }}
+        run: |
+          if [ "$RUNTIME" = jvm ]; then
+            docker run --rm --network none --platform linux/riscv64 "hello-wasm-lang-$RUNTIME:rv64" sh -lc '
+              printf "class Hello { public static void main(String[] a) { System.out.println(\"java\"); } }\n" > Hello.java && javac Hello.java && java Hello &&
+              printf "fun main() = println(\"kotlin\")\n" > hello.kt && kotlinc hello.kt -include-runtime -d hello.jar && java -jar hello.jar &&
+              groovy -e "println \"groovy\"" &&
+              printf "@main def hello() = println(\"scala\")\n" > hello.scala && scalac hello.scala && scala hello &&
+              clojure -M -e "(println \"clojure\")"'
+          elif [ "$RUNTIME" = node ]; then
+            docker run --rm --network none --platform linux/riscv64 "hello-wasm-lang-$RUNTIME:rv64" sh -lc '
+              printf "const message: string = \"typescript\"; console.log(message);\n" > hello.ts && tsc hello.ts && node hello.js &&
+              printf "doctype html\nhtml(lang=\"zh-CN\")\n  head\n    meta(charset=\"UTF-8\")\n    title Hello\n  body\n    h1 Hello\n" > index.pug && pug-build index.pug dist/index.html && html-validate dist/index.html &&
+              printf "\$accent: #336699;\n.box { color: \$accent; display: flex; }\n" > style.scss && sass style.scss style.css && postcss style.css --use autoprefixer -o dist/style.css &&
+              printf "{\"rules\":{\"color-no-invalid-hex\":true}}\n" > .stylelintrc.json && stylelint dist/style.css'
+          fi
+
+      - name: Convert and package runtime
+        env:
+          RUNTIME: ${{ matrix.runtime }}
+        run: |
+          mkdir -p "out/$RUNTIME" "artifact/docs/public/runtime/lang/$RUNTIME/riscv64"
+          c2w \
+            --build-arg SOURCE_REPO=https://github.com/container2wasm/container2wasm.git \
+            --build-arg SOURCE_REPO_VERSION=v0.8.4 \
+            --target-arch=riscv64 \
+            "hello-wasm-lang-$RUNTIME:rv64" "out/$RUNTIME/runtime.wasm"
+          node scripts/package-runtime.js \
+            --input "out/$RUNTIME/runtime.wasm" \
+            --dest "artifact/docs/public/runtime/lang/$RUNTIME/riscv64" \
+            --runtime "$RUNTIME" \
+            --runtime-version "$(tr '\n' ' ' < runtime-version.txt)"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hello-wasm-lang-${{ matrix.runtime }}
+          path: artifact/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    if: ${{ needs.build.result == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Remove replaced runtime directories
+        env:
+          RUNTIMES: ${{ needs.prepare.outputs.runtimes }}
+        run: |
+          for runtime in $(printf '%s' "$RUNTIMES" | jq -r '.[]'); do
+            rm -rf "docs/public/runtime/lang/$runtime/riscv64"
+            if [ "$runtime" = jvm ]; then rm -rf docs/public/runtime/lang/java docs/public/runtime/lang/kotlin; fi
+            if [ "$runtime" = node ]; then rm -rf docs/public/runtime/lang/javascript docs/public/runtime/lang/typescript docs/public/runtime/lang/html docs/public/runtime/lang/css; fi
+          done
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: hello-wasm-lang-*
+          path: .
+          merge-multiple: true
+
+      - name: Validate generated assets
+        env:
+          RUNTIMES: ${{ needs.prepare.outputs.runtimes }}
+        run: |
+          required=$(printf '%s' "$RUNTIMES" | jq -r 'join(",")')
+          node scripts/check-runtimes.js "--require=$required"
+
+      - name: Update runtime size report
+        run: node scripts/report-runtime-sizes.js --write
+
+      - name: Commit runtime assets
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+          git add docs/public/runtime/lang docs/runtimes/index.md
+          if git diff --cached --quiet; then
+            echo 'Runtime assets are unchanged.'
+            exit 0
+          fi
+          git commit -m 'chore(runtime): update RISC-V 64 language runtimes'
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"

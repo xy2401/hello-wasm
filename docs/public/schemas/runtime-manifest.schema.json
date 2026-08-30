@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hello-wasm.pages.dev/schemas/runtime-manifest.schema.json",
+  "title": "Hello WASM runtime manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "runtimeId", "targetArch", "runtimeVersion", "systemVersion", "container2wasmVersion", "createdAt", "totalRawSize", "chunks"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "runtimeId": { "type": "string", "pattern": "^(lang|shell)/[a-z0-9-]+$" },
+    "targetArch": { "const": "riscv64" },
+    "runtimeVersion": { "type": "string", "minLength": 1 },
+    "systemVersion": { "type": "string", "minLength": 1 },
+    "container2wasmVersion": { "const": "0.8.4" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "totalRawSize": { "type": "integer", "minimum": 1 },
+    "chunks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["filename", "rawSize", "compressedSize", "sha256"],
+        "properties": {
+          "filename": { "type": "string", "pattern": "^runtime-[a-f0-9]{12}-part-[0-9]{2,}\\.gz$" },
+          "rawSize": { "type": "integer", "minimum": 1, "maximum": 10485760 },
+          "compressedSize": { "type": "integer", "minimum": 1, "maximum": 25165824 },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        }
+      }
+    }
+  }
+}
