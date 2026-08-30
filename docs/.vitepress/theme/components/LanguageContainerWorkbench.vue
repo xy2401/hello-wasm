@@ -4,6 +4,7 @@ import { useData } from 'vitepress'
 import type { Terminal } from '@xterm/xterm'
 import type { FitAddon } from '@xterm/addon-fit'
 import { languageContainerRuntime, type LanguageRuntimeId } from '../data/languageContainerRuntimes'
+import WorkbenchExampleMenu from './WorkbenchExampleMenu.vue'
 import '@xterm/xterm/css/xterm.css'
 
 type RuntimeStatus = 'idle' | 'downloading' | 'initializing' | 'running' | 'error' | 'unavailable'
@@ -18,13 +19,32 @@ interface RuntimeManifest {
   chunks: RuntimeChunk[]
 }
 
-const props = defineProps<{ runtimeId: LanguageRuntimeId }>()
+const props = defineProps<{
+  runtimeId: LanguageRuntimeId
+  runtimeIds?: LanguageRuntimeId[]
+  title?: string
+  toolchain?: string
+}>()
 const runtime = computed(() => languageContainerRuntime(props.runtimeId)!)
+const memberRuntimes = computed(() => {
+  const ids = props.runtimeIds?.length ? props.runtimeIds : [props.runtimeId]
+  return ids.map((id) => languageContainerRuntime(id)).filter((item) => item?.supported)
+})
+const displayName = computed(() => props.title || runtime.value.name)
+const examples = computed(() => memberRuntimes.value.flatMap((member) =>
+  member!.examples.map((example, index) => ({
+    id: `${member!.id}-${index}`,
+    title: memberRuntimes.value.length > 1 ? `${member!.name} · ${example.title}` : example.title,
+    summary: example.command.split('\n', 1)[0],
+    source: example.command,
+  })),
+))
 const { isDark } = useData()
 const terminalHost = ref<HTMLElement>()
 const status = ref<RuntimeStatus>(runtime.value.supported ? 'idle' : 'unavailable')
 const message = ref(runtime.value.note ?? '运行时按需加载，不会在打开页面时下载。')
 const runtimeVersion = ref(runtime.value.baseline)
+const toolchainDisplay = computed(() => props.toolchain || runtimeVersion.value)
 const systemVersion = ref('Alpine Linux 3.23')
 const chunkDisplay = ref(runtime.value.supported ? '等待清单' : '不适用')
 const progress = ref(0)
@@ -106,7 +126,8 @@ async function loadRuntime(manifest: RuntimeManifest, assetBase: string) {
   const buffers: ArrayBuffer[] = new Array(manifest.chunks.length)
   let completed = 0
   await Promise.all(manifest.chunks.map(async (chunk, index) => {
-    const response = await fetch(`${assetBase}/${chunk.filename}`)
+    const assetUrl = `${assetBase}/${chunk.filename}?sha256=${chunk.sha256.slice(0, 12)}`
+    const response = await fetch(assetUrl)
     if (!response.ok) throw new Error(`分片 ${chunk.filename} 下载失败（${response.status}）`)
     const compressed = await response.arrayBuffer()
     if (chunk.compressedSize !== undefined && compressed.byteLength !== chunk.compressedSize) throw new Error(`分片 ${chunk.filename} 压缩体积与清单不一致。`)
@@ -181,7 +202,7 @@ async function startRuntime() {
     worker.addEventListener('message', (event: MessageEvent) => {
       if (event.data?.type === 'runtime-started') {
         status.value = 'running'
-        message.value = `${runtime.value.name} RISC-V 64 环境已启动。`
+        message.value = `${displayName.value} RISC-V 64 环境已启动。`
         terminal?.focus()
       } else if (event.data?.type === 'runtime-error') {
         throwRuntimeError(event.data.stack || event.data.message)
@@ -244,68 +265,58 @@ watch(isDark, (dark) => {
 
 <template>
   <ClientOnly>
-    <section class="language-container" :aria-label="`${runtime.name} RISC-V 64 浏览器容器`">
-      <header>
-        <div>
-          <strong>{{ runtime.name }}</strong>
+    <section class="shell-workbench shell-workbench--wasm" :aria-label="`${displayName} RISC-V 64 浏览器容器`">
+      <header class="workbench-header">
+        <div class="workbench-identity">
+          <strong>{{ displayName }}</strong>
+          <span aria-hidden="true">·</span>
           <a href="https://github.com/container2wasm/container2wasm" target="_blank" rel="noopener noreferrer">container2wasm 0.8.4</a>
         </div>
-        <button type="button" :disabled="status === 'downloading' || status === 'initializing' || !runtime.supported" @click="startRuntime">{{ actionLabel }}</button>
+        <button
+          type="button"
+          class="workbench-status"
+          :class="status"
+          :disabled="status === 'downloading' || status === 'initializing' || !runtime.supported"
+          @click="startRuntime"
+        ><i></i>{{ actionLabel }}</button>
       </header>
-      <dl>
+      <dl class="workbench-specs">
         <div><dt>系统</dt><dd><a href="https://alpinelinux.org/" target="_blank" rel="noopener noreferrer">{{ systemVersion }}</a></dd></div>
         <div><dt>架构</dt><dd>RISC-V 64</dd></div>
-        <div><dt>工具链</dt><dd>{{ runtimeVersion }}</dd></div>
+        <div><dt>工具链</dt><dd :title="runtimeVersion">{{ toolchainDisplay }}</dd></div>
         <div><dt>加载</dt><dd>{{ chunkDisplay }}</dd></div>
       </dl>
-      <p v-if="!runtime.supported" class="language-container__unsupported">{{ runtime.note }}</p>
-      <div v-else class="language-container__terminal">
-        <div class="language-container__toolbar">
-          <span>{{ message }}</span>
-          <div>
-            <button v-for="example in runtime.examples" :key="example.title" type="button" :disabled="status !== 'running'" @click="runExample(example.command)">{{ example.title }}</button>
-            <button type="button" :disabled="status !== 'running'" @click="clearTerminal">清屏</button>
+
+      <div v-if="errorText" class="workbench-error" role="alert" aria-live="assertive">
+        <strong>容器启动失败</strong>
+        <pre>{{ errorText }}</pre>
+      </div>
+
+      <div class="workbench-terminal">
+        <div class="workbench-toolbar">
+          <div class="workbench-toolbar-message">
+            <strong>容器终端</strong><span>{{ message }}</span>
+            <div v-if="status === 'downloading'" class="workbench-progress" :title="`已加载 ${progress}%`">
+              <i :style="{ width: `${progress}%` }" />
+            </div>
+          </div>
+          <div class="workbench-controls">
+            <WorkbenchExampleMenu
+              :examples="examples"
+              :disabled="status !== 'running'"
+              :compact="examples.length > 6"
+              :hint="status === 'running' ? '选择并执行示例' : '请先启动容器'"
+              @select="runExample"
+            />
+            <button type="button" class="workbench-button" :disabled="status !== 'running'" @click="clearTerminal">清屏</button>
           </div>
         </div>
-        <div v-if="status === 'idle' || status === 'unavailable' || status === 'error'" class="language-container__idle">
-          <code>$ {{ runtime.command }}</code>
-          <p>{{ message }}</p>
+        <div v-if="status === 'idle' || status === 'unavailable' || status === 'error'" class="workbench-idle">
+          <div class="workbench-preview" aria-hidden="true"><span>lang-rv64:~$</span><code>{{ runtime.command }}</code></div>
+          <p>{{ status === 'idle' ? '容器尚未加载。点击右上角“未启动 · 启动容器”后下载运行时分片。' : message }}</p>
         </div>
-        <div v-show="status === 'downloading' || status === 'initializing' || status === 'running'" ref="terminalHost" class="language-container__host" />
-        <div v-if="status === 'downloading'" class="language-container__progress"><i :style="{ width: `${progress}%` }" /></div>
+        <div v-show="status === 'downloading' || status === 'initializing' || status === 'running'" ref="terminalHost" class="workbench-terminal-host" />
       </div>
-      <pre v-if="errorText" class="language-container__error">{{ errorText }}</pre>
     </section>
   </ClientOnly>
 </template>
-
-<style scoped>
-.language-container { margin: 20px 0 32px; border-top: 1px solid var(--vp-c-divider); border-bottom: 1px solid var(--vp-c-divider); }
-.language-container > header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--vp-c-divider); }
-.language-container > header div { display: flex; align-items: baseline; gap: 8px; }
-.language-container > header a { color: var(--vp-c-text-2); font-size: 13px; }
-.language-container button { padding: 5px 10px; border: 1px solid var(--vp-c-divider); border-radius: 5px; background: var(--vp-c-bg); color: var(--vp-c-text-1); cursor: pointer; }
-.language-container button:disabled { cursor: not-allowed; opacity: .45; }
-.language-container > dl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; border-bottom: 1px solid var(--vp-c-divider); }
-.language-container > dl div { padding: 9px 12px; border-right: 1px solid var(--vp-c-divider); }
-.language-container > dl div:last-child { border-right: 0; }
-.language-container dt { color: var(--vp-c-text-3); font-size: 12px; }
-.language-container dd { margin: 2px 0 0; overflow-wrap: anywhere; font-size: 13px; font-weight: 600; }
-.language-container__toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 7px 0; border-bottom: 1px solid var(--vp-c-divider); color: var(--vp-c-text-2); font-size: 13px; }
-.language-container__toolbar div { display: flex; flex-wrap: wrap; gap: 6px; }
-.language-container__idle { min-height: 320px; padding: 48px 18px; background: var(--vp-code-block-bg); }
-.language-container__idle code { display: block; color: var(--vp-c-brand-1); }
-.language-container__idle p { color: var(--vp-c-text-2); }
-.language-container__host { height: 420px; padding: 10px; background: #0b1020; }
-.language-container__progress { height: 3px; background: var(--vp-c-divider); }
-.language-container__progress i { display: block; height: 100%; background: var(--vp-c-brand-1); transition: width .2s; }
-.language-container__unsupported { min-height: 180px; margin: 0; padding: 48px 0; color: var(--vp-c-warning-1); }
-.language-container__error { max-height: 220px; margin: 0; overflow: auto; color: var(--vp-c-danger-1); white-space: pre-wrap; }
-@media (max-width: 720px) {
-  .language-container > dl { grid-template-columns: 1fr 1fr; }
-  .language-container > dl div:nth-child(2) { border-right: 0; }
-  .language-container__toolbar { align-items: flex-start; flex-direction: column; }
-  .language-container__host { height: 360px; }
-}
-@media (prefers-reduced-motion: reduce) { .language-container__progress i { transition: none; } }
-</style>
