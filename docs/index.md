@@ -32,7 +32,7 @@ features:
     details: 用 container2wasm 将 RISC-V 64 Linux 用户态带进浏览器，保留真实工具链与命令体验。
   - icon: 📦
     title: 运行时资产
-    details: 统一构建、分片、校验并发布 Hello Lang 使用的 JVM、Node 与独立语言运行时。
+    details: 统一构建、分片、校验并发布 Hello Lang 与 Hello Shell 使用的大型运行时。
 ---
 
 ## 内容入口
@@ -47,14 +47,15 @@ features:
 
 ## 运行时体系
 
-Hello WASM 将文档和大型运行时资产放在同一套可追溯结构中。产品页面仍属于 Hello Lang，物理工具链则在这里集中构建，避免每门语言重复保存相同的基础系统。
+Hello WASM 将文档和大型运行时资产放在同一套可追溯结构中。产品页面仍属于 Hello Lang 或 Hello Shell，物理工具链则在这里集中构建。
 
 - **JVM 家族**：Java、Kotlin、Groovy、Scala、Clojure 共用一份 JDK 与语言工具链。
 - **Node 家族**：JavaScript、TypeScript、HTML/Pug、CSS/Sass/PostCSS 共用一份 Node.js 工具链。
 - **独立运行时**：Python、C/C++、Go、Rust、PHP、Ruby 各自保留完整环境。
+- **Shell 运行时**：Alpine / ash、多 Shell 使用 RISC-V 64；PowerShell 保留 AMD64。三套资产由 Shell 页面共享读取。
 - **暂不提供**：C# 尚无经过验证的 Linux RISC-V 64 SDK，因此不伪装成可运行环境。
 
-[运行时目录](/runtimes/)列出真实版本、gzip 下载量、分片数量和校验信息。浏览器读取 manifest 后逐片校验 SHA-256，不回退到 x64 资产。
+[运行时目录](/runtimes/)列出已记录版本、gzip 下载量、分片数量和校验信息。浏览器读取 manifest 后逐片校验 SHA-256，并验证页面指定的架构。历史 Shell 清单缺失的版本信息已明确标注。
 
 ## Playground
 
@@ -64,13 +65,13 @@ Hello WASM 将文档和大型运行时资产放在同一套可追溯结构中。
 
 ## 构建与发布
 
-- 运行时由手动触发的 GitHub Actions 构建，仅生成 `linux/riscv64` 资产。
+- 运行时由手动触发的 GitHub Actions 构建；Lang 和 Shell 基础环境使用 `linux/riscv64`，Shell PowerShell 使用 `linux/amd64`。
 - gzip 分片作为普通 Git 文件保存，每门语言家族只保留当前版本。
 - 静态站点可以部署到 Cloudflare Pages 等普通静态托管；仓库本身不代表线上站点已经配置或发布。
-- Hello Lang 通过可配置的运行时基址读取远程 manifest，地址不可用时显示明确错误，不切换到另一种架构。
+- Hello Lang 和 Hello Shell 通过 `VITE_WASM_RUNTIME_BASE` 读取远程 manifest，地址不可用时显示明确错误，不切换到另一种架构。
 
 ## 当前边界
 
-- 只提供 RISC-V 64 容器运行时，不提供 x64 回退。
+- Lang 提供 RISC-V 64 容器运行时；Shell PowerShell 是明确配置的 AMD64 目标，不是回退资产。
 - 浏览器运行已构建资产，不在客户端构建容器。
-- WebAssembly 文档、构建配置和资产由 Hello WASM 管理；各语言教程仍由 Hello Lang 管理。
+- WebAssembly 文档、重型构建配置和资产由 Hello WASM 管理；语言与 Shell 教程、实验素材及各自终端交互由对应项目管理。

@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "runtimeId": "shell/multi",
+  "targetArch": "riscv64",
+  "runtimeVersion": "历史资产：原清单未记录实际工具版本",
+  "systemVersion": "Alpine Linux 3.22",
+  "container2wasmVersion": "0.8.4",
+  "createdAt": "2026-08-27T06:01:34.589Z",
+  "totalRawSize": 160842024,
+  "provenance": {
+    "kind": "legacy-migration",
+    "sourceRepository": "xy2401/hello-shell",
+    "capturedSourceCommit": "9fd120cb3e73e4d9d3998ef29d19b87492fde6f9",
+    "sourceDirectory": "docs/public/runtime/c2w-shell",
+    "sourceManifestSha256": "56e79902af25fa433c4bc180ea91180a42e8d774bbf98c525b796fe7caae6876",
+    "wasmSha256": "edcae4bd6c701b04dc33fa887da8caece191cb181a93eae40f0d92217ebc6c4c",
+    "migratedAt": "2026-10-04T23:40:40.466Z"
+  },
+  "chunks": [
+    {
+      "filename": "runtime-edcae4bd6c70-part-00.gz",
+      "rawSize": 10485760,
+      "compressedSize": 6321461,
+      "sha256": "8156d3d4890dfdbb74060c65f048e6238ca868d05313f4cc4276e9a614f5e277"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-01.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4584470,
+      "sha256": "bdc493c19ede7bcc0a460e12dcadf6d7e6087b5a31fa695fab88008279ef150b"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-02.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3430056,
+      "sha256": "e64031c87204822dae7f41e20d1069b7d71b777746cc7c7fecd920b2634508b8"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-03.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3370969,
+      "sha256": "27dd409d509641f2dd74b9420da4e1bb5a04e568a98a26e3619b89bfc7246166"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-04.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3657296,
+      "sha256": "4dc60465ec13c9ef261008d81cf44fec20e6678b09e1339b5f071bb869005adf"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-05.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4942201,
+      "sha256": "0f41268fce6cb552faa003e08d256d245be9a204a66ace32ce7a5bb910c1d649"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-06.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4187540,
+      "sha256": "48a0529bd052a983a7d13d92569ce430e514ebbe07973815f390a8372a2c3340"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-07.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4471034,
+      "sha256": "722de1bb1b36650e5042525604de50692e03b2ced3a6bfde9f3c01b8cd627b6b"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-08.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3844622,
+      "sha256": "fb3946648141f4c9e4d6ccd6d4e808ff8e876f1f524120e1d0801a3bec4ff24d"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-09.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4856514,
+      "sha256": "54fb6ce6fb243989be4b8dd7b4851e3ef0a41aa9d0d31c341f9683e1be89fc21"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-10.gz",
+      "rawSize": 10485760,
+      "compressedSize": 3792956,
+      "sha256": "40202aefda2a56ba2c8b4fb00c58ad69a496b6026807526da27c0f05743cd0b2"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-11.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4008233,
+      "sha256": "d5a88de860d636d4b427b81a4cc423556a3212f250d09c7ddf7be4cb64540ca9"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-12.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4414003,
+      "sha256": "f2412e32e59be77b8bb39e9ed9e10e2e728eab5573a0c4c09125817185c46d17"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-13.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5071211,
+      "sha256": "d5411bbbfc255e52d26bb62907e2c2d1e527c270cc619861ee3a9c3698b3c8d9"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-14.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4552068,
+      "sha256": "f5c030526c11807289f8aff9a994e048096609258e2544316d1d9b9fd61ccf1b"
+    },
+    {
+      "filename": "runtime-edcae4bd6c70-part-15.gz",
+      "rawSize": 3555624,
+      "compressedSize": 1059563,
+      "sha256": "889aa0a4065876272571af4611acd0812eb15ea8bea5689ef801de36b246c6aa"
+    }
+  ]
+}

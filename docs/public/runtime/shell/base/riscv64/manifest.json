@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "runtimeId": "shell/base",
+  "targetArch": "riscv64",
+  "runtimeVersion": "历史资产：原清单未记录实际工具版本",
+  "systemVersion": "Alpine Linux 3.22",
+  "container2wasmVersion": "0.8.4",
+  "createdAt": "2026-08-27T00:49:18.334Z",
+  "totalRawSize": 56892397,
+  "provenance": {
+    "kind": "legacy-migration",
+    "sourceRepository": "xy2401/hello-shell",
+    "capturedSourceCommit": "9fd120cb3e73e4d9d3998ef29d19b87492fde6f9",
+    "sourceDirectory": "docs/public/runtime/c2w",
+    "sourceManifestSha256": "1fa5eda9ce7e975b7a78a82c11d940b40bd465ab3fb94ca2064f6a9de26f65ee",
+    "wasmSha256": "818f12ce32744752c89f0e8fcb248d4079505980272770e2a51b7d61f52dee27",
+    "migratedAt": "2026-10-04T23:40:40.075Z"
+  },
+  "chunks": [
+    {
+      "filename": "runtime-818f12ce3274-part-00.gz",
+      "rawSize": 10485760,
+      "compressedSize": 6529468,
+      "sha256": "e4ee6c0f208f3a99aa317baf9a9722e630a2ac9cf67146c868224a30e24898b3"
+    },
+    {
+      "filename": "runtime-818f12ce3274-part-01.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4727966,
+      "sha256": "4ca6f29a191e8a2b49994b8fac242cdd1f308f323b6cfe48f703c154577f0bc9"
+    },
+    {
+      "filename": "runtime-818f12ce3274-part-02.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4380774,
+      "sha256": "f0f859e5f0eb33239eca1b1aca7aaf64cc2c8eb49d9ad7ed8d4fa36e5abebf62"
+    },
+    {
+      "filename": "runtime-818f12ce3274-part-03.gz",
+      "rawSize": 10485760,
+      "compressedSize": 5508753,
+      "sha256": "f3b15fc40ca783d1d5f6f47b6d5a72e91b7c2b27c38bf5abb4c0b0bb8416727d"
+    },
+    {
+      "filename": "runtime-818f12ce3274-part-04.gz",
+      "rawSize": 10485760,
+      "compressedSize": 4577562,
+      "sha256": "00b7e56944a62b2486c6d3142c3913447e05c13693349efa7324094b8f0dd170"
+    },
+    {
+      "filename": "runtime-818f12ce3274-part-05.gz",
+      "rawSize": 4463597,
+      "compressedSize": 1472020,
+      "sha256": "5fb3b5f07ad414467204913a9fc7565a6ee4e3af04f167c884d774419b37dad3"
+    }
+  ]
+}

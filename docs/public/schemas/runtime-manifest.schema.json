@@ -5,15 +5,36 @@
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "runtimeId", "targetArch", "runtimeVersion", "systemVersion", "container2wasmVersion", "createdAt", "totalRawSize", "chunks"],
+  "allOf": [
+    {
+      "if": { "properties": { "runtimeId": { "const": "shell/powershell" } } },
+      "then": { "properties": { "targetArch": { "const": "amd64" } } },
+      "else": { "properties": { "targetArch": { "const": "riscv64" } } }
+    }
+  ],
   "properties": {
     "schemaVersion": { "const": 1 },
     "runtimeId": { "type": "string", "pattern": "^(lang|shell)/[a-z0-9-]+$" },
-    "targetArch": { "const": "riscv64" },
+    "targetArch": { "enum": ["riscv64", "amd64"] },
     "runtimeVersion": { "type": "string", "minLength": 1 },
     "systemVersion": { "type": "string", "minLength": 1 },
     "container2wasmVersion": { "const": "0.8.4" },
     "createdAt": { "type": "string", "format": "date-time" },
     "totalRawSize": { "type": "integer", "minimum": 1 },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "sourceRepository", "capturedSourceCommit", "sourceDirectory", "sourceManifestSha256", "wasmSha256", "migratedAt"],
+      "properties": {
+        "kind": { "const": "legacy-migration" },
+        "sourceRepository": { "type": "string" },
+        "capturedSourceCommit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "sourceDirectory": { "type": "string" },
+        "sourceManifestSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "wasmSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "migratedAt": { "type": "string", "format": "date-time" }
+      }
+    },
     "chunks": {
       "type": "array",
       "minItems": 1,

@@ -5,6 +5,9 @@ import zlib from 'node:zlib'
 
 const root = process.cwd()
 const supported = ['jvm', 'node', 'python', 'cpp', 'go', 'rust', 'php', 'ruby']
+const shellTargets = { base: 'riscv64', multi: 'riscv64', powershell: 'amd64' }
+const family = process.argv.find(arg => arg.startsWith('--family='))?.slice(9) || 'all'
+if (!['all', 'lang', 'shell'].includes(family)) throw new Error('family 必须是 all、lang 或 shell')
 const productAssets = {
   java: 'jvm', kotlin: 'jvm', groovy: 'jvm', scala: 'jvm', clojure: 'jvm',
   javascript: 'node', typescript: 'node', html: 'node', css: 'node',
@@ -35,11 +38,13 @@ expect(workflow.includes('--target-arch=riscv64'), 'container2wasm 必须生成 
 expect(!/--target-arch=(amd64|x86_64)/i.test(workflow), 'Lang 工作流不得生成 x64 资产')
 expect(shellWorkflow.includes('workflow_dispatch:'), 'Shell 运行时工作流必须仅提供手动入口')
 expect(!/^\s*(push|pull_request):/m.test(shellWorkflow), 'Shell 运行时工作流不得自动触发')
-expect(shellWorkflow.includes('--platform linux/riscv64'), 'Shell Docker 镜像必须构建为 linux/riscv64')
-expect(shellWorkflow.includes('--target-arch=riscv64'), 'Shell container2wasm 必须生成 riscv64')
-expect(!/(?:--target-arch=(?:amd64|x86_64)|--platform linux\/(?:amd64|x86_64)|powershell)/i.test(shellWorkflow), 'Shell 准备工作流不得生成 x64 或 PowerShell 运行时')
+expect(shellWorkflow.includes('--platform "linux/$ARCH"'), 'Shell Docker 镜像必须按矩阵架构构建')
+expect(shellWorkflow.includes('--target-arch="$ARCH"'), 'Shell container2wasm 必须使用相同矩阵架构')
+for (const [runtime, arch] of Object.entries(shellTargets)) expect(shellWorkflow.includes(`"runtime":"${runtime}","arch":"${arch}"`), `Shell 矩阵错误：${runtime}/${arch}`)
+expect(shellWorkflow.includes('contents: read') && shellWorkflow.includes('contents: write'), 'Shell 构建/发布权限必须分开')
+expect(!shellWorkflow.includes('git pull --rebase'), '分支前移时必须停止 Shell 回写')
 expect(shellWorkflow.includes('--family shell'), 'Shell 工作流必须生成 shell/* manifest')
-expect(shellWorkflow.includes('docs/public/runtime/shell/$RUNTIME/riscv64'), 'Shell 运行时路径不正确')
+expect(shellWorkflow.includes('docs/public/runtime/shell/$RUNTIME/$ARCH'), 'Shell 运行时路径不正确')
 expect(component.includes('runtime/lang/${runtime.value.assetId}/riscv64'), '实验台必须按 assetId 使用共享 Lang 运行时路径')
 expect(component.includes('manifest.runtimeId !== `lang/${runtime.value.assetId}`'), '实验台必须按 assetId 校验 manifest')
 expect(component.includes('?sha256=${chunk.sha256.slice(0, 12)}'), '运行时分片请求必须使用内容哈希隔离旧缓存')
@@ -67,8 +72,9 @@ expect(manifestSchema.$id === 'https://hello-wasm.pages.dev/schemas/runtime-mani
 expect(manifestSchema.required.includes('totalRawSize'), 'manifest Schema 必须要求 totalRawSize')
 expect(fs.existsSync(path.join(root, 'runtimes/shell/base/Dockerfile')), '缺少 Shell 基础容器准备配置')
 expect(fs.existsSync(path.join(root, 'runtimes/shell/multi/Dockerfile')), '缺少 Shell 多环境准备配置')
-expect(fs.existsSync(path.join(root, 'runtimes/shell/package-c2w.reference.js')), '缺少 Shell 打包配置准备')
-for (const runtime of ['base', 'multi']) {
+expect(fs.existsSync(path.join(root, 'runtimes/shell/powershell/Dockerfile')), '缺少迁入的 PowerShell 容器配置')
+expect(!fs.existsSync(path.join(root, 'runtimes/shell/package-c2w.reference.js')), 'Shell 必须复用公共打包器')
+for (const runtime of Object.keys(shellTargets)) {
   expect(shellWorkflow.includes(`- ${runtime}`) || shellWorkflow.includes(`"${runtime}"`), `Shell 工作流缺少 ${runtime}`)
 }
 
@@ -109,11 +115,11 @@ const shellRuntimeRoot = path.join(root, 'docs/public/runtime/shell')
 const requiredShellArg = process.argv.find((arg) => arg.startsWith('--require-shell='))
 const requiredShell = requiredShellArg ? requiredShellArg.slice('--require-shell='.length).split(',').filter(Boolean) : []
 for (const runtime of requiredShell) {
-  expect(['base', 'multi'].includes(runtime), `要求校验未知 Shell 运行时：${runtime}`)
-  expect(fs.existsSync(path.join(shellRuntimeRoot, runtime, 'riscv64', 'manifest.json')), `缺少已构建 Shell 运行时：${runtime}`)
+  expect(Object.hasOwn(shellTargets, runtime), `要求校验未知 Shell 运行时：${runtime}`)
+  expect(fs.existsSync(path.join(shellRuntimeRoot, runtime, shellTargets[runtime] || '', 'manifest.json')), `缺少已构建 Shell 运行时：${runtime}`)
 }
 
-if (fs.existsSync(runtimeRoot)) {
+if (family !== 'shell' && fs.existsSync(runtimeRoot)) {
   for (const runtime of supported) {
     const directory = path.join(runtimeRoot, runtime, 'riscv64')
     if (!fs.existsSync(directory)) continue
@@ -150,9 +156,9 @@ if (fs.existsSync(runtimeRoot)) {
   }
 }
 
-if (fs.existsSync(shellRuntimeRoot)) {
-  for (const runtime of ['base', 'multi']) {
-    const directory = path.join(shellRuntimeRoot, runtime, 'riscv64')
+if (family !== 'lang' && fs.existsSync(shellRuntimeRoot)) {
+  for (const [runtime, arch] of Object.entries(shellTargets)) {
+    const directory = path.join(shellRuntimeRoot, runtime, arch)
     if (!fs.existsSync(directory)) continue
     const manifestPath = path.join(directory, 'manifest.json')
     expect(fs.existsSync(manifestPath), `shell/${runtime} 缺少 manifest.json`)
@@ -161,15 +167,21 @@ if (fs.existsSync(shellRuntimeRoot)) {
     try { manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8')) } catch { failures.push(`shell/${runtime} manifest 不是有效 JSON`); continue }
     expect(manifest.schemaVersion === 1, `shell/${runtime} schemaVersion 错误`)
     expect(manifest.runtimeId === `shell/${runtime}`, `shell/${runtime} runtimeId 错误`)
-    expect(manifest.targetArch === 'riscv64', `shell/${runtime} 不是 riscv64`)
+    expect(manifest.targetArch === arch, `shell/${runtime} 架构必须为 ${arch}`)
     expect(manifest.systemVersion === 'Alpine Linux 3.22', `shell/${runtime} 系统版本错误`)
     expect(manifest.container2wasmVersion === '0.8.4', `shell/${runtime} container2wasm 版本错误`)
     expect(typeof manifest.runtimeVersion === 'string' && manifest.runtimeVersion.length > 0, `shell/${runtime} 缺少实际工具版本`)
     expect(Array.isArray(manifest.chunks) && manifest.chunks.length > 0, `shell/${runtime} 没有分片`)
     let totalRaw = 0
+    const wasmHash = crypto.createHash('sha256')
+    const names = new Set()
     for (const chunk of manifest.chunks ?? []) {
+      const validName = /^runtime-[a-f0-9]{12}-part-\d{2,}\.gz$/.test(chunk.filename)
+      expect(validName, `shell/${runtime} 分片文件名不规范：${chunk.filename}`)
+      expect(!names.has(chunk.filename), `shell/${runtime} 分片文件名重复：${chunk.filename}`)
+      names.add(chunk.filename)
+      if (!validName) continue
       const chunkPath = path.join(directory, chunk.filename)
-      expect(/^runtime-[a-f0-9]{12}-part-\d{2,}\.gz$/.test(chunk.filename), `shell/${runtime} 分片文件名不规范：${chunk.filename}`)
       expect(fs.existsSync(chunkPath), `shell/${runtime} 缺少 ${chunk.filename}`)
       if (!fs.existsSync(chunkPath)) continue
       const compressed = fs.readFileSync(chunkPath)
@@ -177,13 +189,17 @@ if (fs.existsSync(shellRuntimeRoot)) {
       expect(compressed.length <= maxFileBytes, `shell/${runtime}/${chunk.filename} 超过 24 MiB`)
       expect(crypto.createHash('sha256').update(compressed).digest('hex') === chunk.sha256, `shell/${runtime}/${chunk.filename} SHA-256 不一致`)
       try {
-        const raw = zlib.gunzipSync(compressed)
+        const raw = zlib.gunzipSync(compressed, { maxOutputLength: 10 * 1024 * 1024 })
         expect(raw.length === chunk.rawSize, `shell/${runtime}/${chunk.filename} 原始体积不一致`)
         expect(raw.length <= 10 * 1024 * 1024, `shell/${runtime}/${chunk.filename} 原始分片超过 10 MiB`)
         totalRaw += raw.length
+        wasmHash.update(raw)
       } catch { failures.push(`shell/${runtime}/${chunk.filename} 不是有效 gzip`) }
     }
     expect(totalRaw === manifest.totalRawSize, `shell/${runtime} totalRawSize 不一致`)
+    const digest = wasmHash.digest('hex')
+    expect(manifest.chunks.every(chunk => chunk.filename.startsWith(`runtime-${digest.slice(0, 12)}-`)), `shell/${runtime} 文件名与完整 WASM 摘要不一致`)
+    if (manifest.provenance) expect(manifest.provenance.wasmSha256 === digest, `shell/${runtime} 迁移来源完整 WASM 摘要不一致`)
   }
 }
 
@@ -191,4 +207,4 @@ if (failures.length) {
   console.error(failures.map((failure) => `- ${failure}`).join('\n'))
   process.exit(1)
 }
-console.log(`Hello WASM runtime check passed: ${Object.keys(productAssets).length} Lang products map to ${supported.length} physical runtimes; 2 Shell targets are prepared.`)
+console.log(`Hello WASM runtime check passed (assets: ${family}): ${Object.keys(productAssets).length} Lang products map to ${supported.length} physical runtimes; 3 Shell targets are configured.`)

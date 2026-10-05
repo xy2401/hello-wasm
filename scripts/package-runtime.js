@@ -7,7 +7,7 @@ const CHUNK_BYTES = 10 * 1024 * 1024
 const MAX_DEPLOYED_FILE_BYTES = 24 * 1024 * 1024
 
 function parseArgs() {
-  const values = { input: '', dest: '', family: 'lang', runtime: '', runtimeVersion: '', systemVersion: 'Alpine Linux 3.23' }
+  const values = { input: '', dest: '', family: 'lang', runtime: '', runtimeVersion: '', systemVersion: 'Alpine Linux 3.23', targetArch: 'riscv64' }
   const args = process.argv.slice(2)
   for (let index = 0; index < args.length; index += 1) {
     const key = args[index]
@@ -17,6 +17,8 @@ function parseArgs() {
     else if (key === '--runtime') values.runtime = args[++index] ?? ''
     else if (key === '--runtime-version') values.runtimeVersion = args[++index] ?? ''
     else if (key === '--system-version') values.systemVersion = args[++index] ?? ''
+    else if (key === '--target-arch') values.targetArch = args[++index] ?? ''
+    else throw new Error(`未知参数：${key}`)
   }
   return values
 }
@@ -27,9 +29,12 @@ if (!options.input || !options.dest || !options.runtime || !options.runtimeVersi
 }
 if (!['lang', 'shell'].includes(options.family)) throw new Error(`无效运行时家族：${options.family}`)
 if (!/^[a-z0-9-]+$/.test(options.runtime)) throw new Error(`无效运行时 ID：${options.runtime}`)
+const expectedArch = options.family === 'shell' && options.runtime === 'powershell' ? 'amd64' : 'riscv64'
+if (options.targetArch !== expectedArch) throw new Error(`${options.family}/${options.runtime} 必须使用 ${expectedArch}`)
 if (!fs.existsSync(options.input)) throw new Error(`找不到 WebAssembly 文件：${options.input}`)
 
 const source = fs.readFileSync(options.input)
+if (source.length < 8 || !source.subarray(0, 8).equals(Buffer.from([0, 97, 115, 109, 1, 0, 0, 0]))) throw new Error('输入必须是 WebAssembly v1 二进制')
 const contentHash = crypto.createHash('sha256').update(source).digest('hex').slice(0, 12)
 fs.mkdirSync(options.dest, { recursive: true })
 for (const filename of fs.readdirSync(options.dest)) {
@@ -56,7 +61,7 @@ for (let offset = 0, index = 0; offset < source.length; offset += CHUNK_BYTES, i
 const manifest = {
   schemaVersion: 1,
   runtimeId: `${options.family}/${options.runtime}`,
-  targetArch: 'riscv64',
+  targetArch: options.targetArch,
   runtimeVersion: options.runtimeVersion.trim(),
   systemVersion: options.systemVersion.trim(),
   container2wasmVersion: '0.8.4',

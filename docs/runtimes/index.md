@@ -54,9 +54,27 @@ container2wasm 保存的是可启动的 RISC-V 64 Linux 用户空间和容器文
 - 普通 Git 会保留旧提交中的大文件。合并资产验证后将整理首次拆分构建的历史，只让当前八套资产进入主分支克隆历史。
 - 压缩率不代表运行效率。JAR 等内容已经压缩，外层 gzip 收益通常小于源码和普通二进制文件。
 
-## Shell 准备运行时
+## Shell 共享运行时
 
 - `shell/base`：Alpine 3.22、BusyBox ash 和基础文件命令。
 - `shell/multi`：Alpine 3.22、Bash、Zsh、Fish 以及 Hello Shell 当前的多 Shell 工具集。
+- `shell/powershell`：Alpine 3.22、PowerShell Core 与 Bash，保留 AMD64 架构。
 
-这两个目标由独立的手动 Action 构建，不会随 Lang 的 `all` 构建，当前 Hello Shell 也不会读取它们。
+Hello Shell 的三个 container2wasm 页面分别读取上述资产；教程、终端组件和实验素材继续由 Shell 管理。`base`、`multi` 使用 RISC-V 64，PowerShell 明确使用 AMD64，两种架构之间没有自动回退。
+
+<!-- shell-runtime-size-report:start -->
+> 运行时实测报告：3/3 套物理资产，依据各目录 `manifest.json` 生成。
+
+| 运行时 / 架构 | 实际工具版本 | 原始 | gzip 下载 | 分片 | 下载 / 原始 |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Alpine / ash / riscv64 | 历史资产：原清单未记录实际工具版本 | 54.3 MiB | 25.9 MiB | 6 | 47.8% |
+| 多 Shell / riscv64 | 历史资产：原清单未记录实际工具版本 | 153.4 MiB | 63.5 MiB | 16 | 41.4% |
+| PowerShell / amd64 | 历史资产：原清单未记录实际工具版本 | 287.8 MiB | 112.1 MiB | 29 | 38.9% |
+| **合计** | **3 套运行时** | **495.4 MiB** | **201.5 MiB** | **51** | **40.7%** |
+
+核对时间：2026-10-04。逐分片字节数与 SHA-256 以 manifest 为准。
+<!-- shell-runtime-size-report:end -->
+
+这批资产从 Hello Shell 的现有 gzip 分片迁入，未重新编译。清单保留原采集时间，`provenance` 记录旧清单摘要、完整 WASM 摘要和迁移时源码提交；该提交不代表原始构建提交。原清单未记录实际工具版本，因此不推定版本号。
+
+后续由 [build-shell-runtimes](https://github.com/xy2401/hello-wasm/actions/workflows/build-shell-runtimes.yml) 手动重建，可选择 `base`、`multi`、`powershell` 或 `all`，不会随 Lang 构建。工作流采集实际版本，验证分片后只回写 Shell 资产和本页；源码分支前移时停止发布并保留 Artifact。

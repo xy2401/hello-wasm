@@ -1,4 +1,4 @@
-name: build-shell-riscv64-runtimes
+name: build-shell-runtimes
 
 on:
   workflow_dispatch:
@@ -12,9 +12,10 @@ on:
           - all
           - base
           - multi
+          - powershell
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: hello-wasm-riscv64-main
@@ -25,15 +26,21 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       runtimes: ${{ steps.matrix.outputs.runtimes }}
+      source-sha: ${{ github.sha }}
     steps:
       - id: matrix
         env:
           SELECTED: ${{ inputs.runtime || 'all' }}
         run: |
           if [ "$SELECTED" = all ]; then
-            echo 'runtimes=["base","multi"]' >> "$GITHUB_OUTPUT"
+            echo 'runtimes=[{"runtime":"base","arch":"riscv64"},{"runtime":"multi","arch":"riscv64"},{"runtime":"powershell","arch":"amd64"}]' >> "$GITHUB_OUTPUT"
           else
-            printf 'runtimes=["%s"]\n' "$SELECTED" >> "$GITHUB_OUTPUT"
+            case "$SELECTED" in
+              base|multi) arch=riscv64 ;;
+              powershell) arch=amd64 ;;
+              *) echo 'Unknown Shell runtime'; exit 1 ;;
+            esac
+            printf 'runtimes=[{"runtime":"%s","arch":"%s"}]\n' "$SELECTED" "$arch" >> "$GITHUB_OUTPUT"
           fi
 
   build:
@@ -44,9 +51,11 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        runtime: ${{ fromJson(needs.prepare.outputs.runtimes) }}
+        include: ${{ fromJson(needs.prepare.outputs.runtimes) }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.source-sha }}
 
       - uses: actions/setup-node@v4
         with:
@@ -64,38 +73,44 @@ jobs:
           sudo chmod +x /usr/local/bin/c2w
           c2w --version
 
-      - name: Build RISC-V 64 Shell image
+      - name: Build Shell image and record actual versions
         env:
           RUNTIME: ${{ matrix.runtime }}
+          ARCH: ${{ matrix.arch }}
         run: |
           docker buildx build \
-            --platform linux/riscv64 \
+            --platform "linux/$ARCH" \
             --file "runtimes/shell/$RUNTIME/Dockerfile" \
-            --tag "hello-wasm-shell-$RUNTIME:rv64" \
+            --tag "hello-wasm-shell-$RUNTIME:$ARCH" \
             --load .
           if [ "$RUNTIME" = base ]; then
-            docker run --rm --platform linux/riscv64 "hello-wasm-shell-$RUNTIME:rv64" \
+            docker run --rm --platform "linux/$ARCH" "hello-wasm-shell-$RUNTIME:$ARCH" \
               sh -lc 'busybox | head -n 1; printf "default shell: "; readlink /bin/sh' | tee runtime-version.txt
+          elif [ "$RUNTIME" = powershell ]; then
+            docker run --rm --platform "linux/$ARCH" "hello-wasm-shell-$RUNTIME:$ARCH" \
+              pwsh -NoLogo -NoProfile -Command '$PSVersionTable.PSVersion.ToString()' | tee runtime-version.txt
           else
-            docker run --rm --platform linux/riscv64 "hello-wasm-shell-$RUNTIME:rv64" \
+            docker run --rm --platform "linux/$ARCH" "hello-wasm-shell-$RUNTIME:$ARCH" \
               sh -lc 'bash --version | head -n 1; zsh --version; fish --version' | tee runtime-version.txt
           fi
 
       - name: Convert and package runtime
         env:
           RUNTIME: ${{ matrix.runtime }}
+          ARCH: ${{ matrix.arch }}
         run: |
-          mkdir -p "out/$RUNTIME" "artifact/docs/public/runtime/shell/$RUNTIME/riscv64"
+          mkdir -p "out/$RUNTIME" "artifact/docs/public/runtime/shell/$RUNTIME/$ARCH"
           c2w \
             --build-arg SOURCE_REPO=https://github.com/container2wasm/container2wasm.git \
             --build-arg SOURCE_REPO_VERSION=v0.8.4 \
-            --target-arch=riscv64 \
-            "hello-wasm-shell-$RUNTIME:rv64" "out/$RUNTIME/runtime.wasm"
+            --target-arch="$ARCH" \
+            "hello-wasm-shell-$RUNTIME:$ARCH" "out/$RUNTIME/runtime.wasm"
           node scripts/package-runtime.js \
             --input "out/$RUNTIME/runtime.wasm" \
-            --dest "artifact/docs/public/runtime/shell/$RUNTIME/riscv64" \
+            --dest "artifact/docs/public/runtime/shell/$RUNTIME/$ARCH" \
             --family shell \
             --runtime "$RUNTIME" \
+            --target-arch "$ARCH" \
             --runtime-version "$(tr '\n' ' ' < runtime-version.txt)" \
             --system-version "Alpine Linux 3.22"
 
@@ -110,17 +125,29 @@ jobs:
     needs: [prepare, build]
     runs-on: ubuntu-latest
     if: ${{ needs.build.result == 'success' }}
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ needs.prepare.outputs.source-sha }}
+
+      - name: Stop if source branch has advanced
+        env:
+          BRANCH: ${{ github.ref_name }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
+        run: |
+          current=$(git ls-remote origin "refs/heads/$BRANCH" | cut -f1)
+          test "$current" = "$SOURCE_SHA" || { echo 'Branch advanced; retain build artifacts without publication.'; exit 1; }
 
       - name: Remove replaced runtime directories
         env:
           RUNTIMES: ${{ needs.prepare.outputs.runtimes }}
         run: |
-          for runtime in $(printf '%s' "$RUNTIMES" | jq -r '.[]'); do
-            rm -rf "docs/public/runtime/shell/$runtime/riscv64"
+          for runtime in $(printf '%s' "$RUNTIMES" | jq -r '.[].runtime'); do
+            arch=riscv64
+            if [ "$runtime" = powershell ]; then arch=amd64; fi
+            rm -rf "docs/public/runtime/shell/$runtime/$arch"
           done
 
       - uses: actions/download-artifact@v4
@@ -133,18 +160,23 @@ jobs:
         env:
           RUNTIMES: ${{ needs.prepare.outputs.runtimes }}
         run: |
-          required=$(printf '%s' "$RUNTIMES" | jq -r 'join(",")')
-          node scripts/check-runtimes.js "--require-shell=$required"
+          required=$(printf '%s' "$RUNTIMES" | jq -r 'map(.runtime) | join(",")')
+          node scripts/check-runtimes.js --family=shell "--require-shell=$required"
+          node scripts/report-runtime-sizes.js --shell --write
 
       - name: Commit runtime assets
+        env:
+          BRANCH: ${{ github.ref_name }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source-sha }}
         run: |
           git config user.name github-actions[bot]
           git config user.email github-actions[bot]@users.noreply.github.com
-          git add docs/public/runtime/shell
+          current=$(git ls-remote origin "refs/heads/$BRANCH" | cut -f1)
+          test "$current" = "$SOURCE_SHA" || { echo 'Branch advanced; publication stopped.'; exit 1; }
+          git add docs/public/runtime/shell docs/runtimes/index.md
           if git diff --cached --quiet; then
             echo 'Shell runtime assets are unchanged.'
             exit 0
           fi
-          git commit -m 'chore(runtime): update RISC-V 64 Shell runtimes'
-          git pull --rebase origin "${{ github.ref_name }}"
-          git push origin "HEAD:${{ github.ref_name }}"
+          git commit -m 'chore(runtime): update shared Shell runtimes'
+          git push origin "HEAD:$BRANCH"

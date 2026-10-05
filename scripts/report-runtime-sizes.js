@@ -3,14 +3,17 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-const runtimeRoot = path.join(root, 'docs/public/runtime/lang')
+const shell = process.argv.includes('--shell')
+const family = shell ? 'shell' : 'lang'
+const runtimeRoot = path.join(root, 'docs/public/runtime', family)
 const documentPath = path.join(root, 'docs/runtimes/index.md')
-const runtimeIds = ['jvm', 'node', 'python', 'cpp', 'go', 'rust', 'php', 'ruby']
-const labels = { jvm: 'JVM', node: 'Node', python: 'Python', cpp: 'C & C++', go: 'Go', rust: 'Rust', php: 'PHP', ruby: 'Ruby' }
+const runtimeIds = shell ? ['base', 'multi', 'powershell'] : ['jvm', 'node', 'python', 'cpp', 'go', 'rust', 'php', 'ruby']
+const labels = { jvm: 'JVM', node: 'Node', python: 'Python', cpp: 'C & C++', go: 'Go', rust: 'Rust', php: 'PHP', ruby: 'Ruby', base: 'Alpine / ash', multi: '多 Shell', powershell: 'PowerShell' }
 
 const rows = []
 for (const id of runtimeIds) {
-  const manifestPath = path.join(runtimeRoot, id, 'riscv64/manifest.json')
+  const arch = shell && id === 'powershell' ? 'amd64' : 'riscv64'
+  const manifestPath = path.join(runtimeRoot, id, arch, 'manifest.json')
   if (!fs.existsSync(manifestPath)) continue
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
   const compressed = manifest.chunks.reduce((sum, chunk) => sum + chunk.compressedSize, 0)
@@ -42,23 +45,25 @@ const formatRuntimeVersion = (id, value) => {
 const totalRaw = rows.reduce((sum, row) => sum + row.manifest.totalRawSize, 0)
 const totalCompressed = rows.reduce((sum, row) => sum + row.compressed, 0)
 const totalChunks = rows.reduce((sum, row) => sum + row.manifest.chunks.length, 0)
+const marker = shell ? 'shell-runtime-size-report' : 'runtime-size-report'
 const body = [
-  '<!-- runtime-size-report:start -->',
+  `<!-- ${marker}:start -->`,
   `> 运行时实测报告：${rows.length}/${runtimeIds.length} 套物理资产，依据各目录 \`manifest.json\` 生成。`,
   '',
-  '| 运行时 | 实际工具版本 | 原始 | gzip 下载 | 分片 | 下载 / 原始 |',
+  `| 运行时${shell ? ' / 架构' : ''} | 实际工具版本 | 原始 | gzip 下载 | 分片 | 下载 / 原始 |`,
   '| --- | --- | ---: | ---: | ---: | ---: |',
-  ...rows.map(({ id, manifest, compressed }) => `| ${labels[id]} | ${formatRuntimeVersion(id, manifest.runtimeVersion)} | ${mib(manifest.totalRawSize)} | ${mib(compressed)} | ${manifest.chunks.length} | ${(compressed * 100 / manifest.totalRawSize).toFixed(1)}% |`),
+  ...rows.map(({ id, manifest, compressed }) => `| ${labels[id]}${shell ? ` / ${manifest.targetArch}` : ''} | ${formatRuntimeVersion(id, manifest.runtimeVersion)} | ${mib(manifest.totalRawSize)} | ${mib(compressed)} | ${manifest.chunks.length} | ${(compressed * 100 / manifest.totalRawSize).toFixed(1)}% |`),
   `| **合计** | **${rows.length} 套运行时** | **${mib(totalRaw)}** | **${mib(totalCompressed)}** | **${totalChunks}** | **${totalRaw ? (totalCompressed * 100 / totalRaw).toFixed(1) : '0.0'}%** |`,
   '',
   `核对时间：${new Date().toISOString().slice(0, 10)}。逐分片字节数与 SHA-256 以 manifest 为准。`,
-  '<!-- runtime-size-report:end -->',
+  `<!-- ${marker}:end -->`,
 ].join('\n')
 
 if (process.argv.includes('--write')) {
   const document = fs.readFileSync(documentPath, 'utf8')
-  const updated = document.replace(/<!-- runtime-size-report:start -->[\s\S]*?<!-- runtime-size-report:end -->/, body)
-  if (updated === document) throw new Error('运行时文档缺少尺寸报告标记')
+  const pattern = new RegExp(`<!-- ${marker}:start -->[\\s\\S]*?<!-- ${marker}:end -->`)
+  if (!pattern.test(document)) throw new Error('运行时文档缺少尺寸报告标记')
+  const updated = document.replace(pattern, body)
   fs.writeFileSync(documentPath, updated)
 } else {
   console.log(body)
