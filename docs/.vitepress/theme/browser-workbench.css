@@ -23,7 +23,7 @@ html.dark {
 }
 
 .shell-workbench {
-  --wb-accent: #0f766e;
+  --wb-accent: var(--vp-c-brand-1);
   margin: 1rem 0 2rem;
   overflow: hidden;
   border: 1px solid var(--vp-c-divider);
@@ -184,8 +184,6 @@ html.dark {
   visibility: hidden;
 }
 
-.workbench-example-menu.available:hover .workbench-example-options,
-.workbench-example-menu.available:focus-within .workbench-example-options,
 .workbench-example-menu.open .workbench-example-options { opacity: 1; pointer-events: auto; transform: translateY(0); visibility: visible; }
 
 .workbench-example-options button {

@@ -48,7 +48,8 @@ expect(shellWorkflow.includes('docs/public/runtime/shell/$RUNTIME/$ARCH'), 'Shel
 expect(component.includes('runtime/lang/${runtime.value.assetId}/riscv64'), '实验台必须按 assetId 使用共享 Lang 运行时路径')
 expect(component.includes('manifest.runtimeId !== `lang/${runtime.value.assetId}`'), '实验台必须按 assetId 校验 manifest')
 expect(component.includes('?sha256=${chunk.sha256.slice(0, 12)}'), '运行时分片请求必须使用内容哈希隔离旧缓存')
-expect(siteConfig.includes('outline: false'), 'Hello WASM 不应重复显示右侧本页目录')
+expect(siteConfig.includes("outline: { level: [2, 3], label: '本页目录' }"), '普通文档必须提供中文本页目录')
+expect(/^---\r?\n[\s\S]*?aside: false[\s\S]*?\r?\n---/.test(playgroundIndex), 'Playground 总览必须按页面关闭本页目录')
 expect(!playgroundIndex.includes('WasmRuntimePlayground'), 'Playground 总览不得保留单页运行时切换器')
 expect(!fs.existsSync(path.join(root, 'docs/.vitepress/theme/components/WasmRuntimePlayground.vue')), '旧单页运行时切换组件应删除')
 for (const runtime of supported) {
@@ -57,6 +58,7 @@ for (const runtime of supported) {
   expect(siteConfig.includes(`link: '/playground/${runtime}'`), `侧栏缺少 Playground 页面：${runtime}`)
   if (fs.existsSync(path.join(root, page))) {
     const source = read(page)
+    expect(/^---\r?\n[\s\S]*?aside: false[\s\S]*?\r?\n---/.test(source), `${runtime} 工作台必须按页面关闭本页目录`)
     expect((source.match(/<LanguageContainerWorkbench/g) ?? []).length === 1, `${runtime} 页面必须且只能包含一个运行时组件`)
   }
 }

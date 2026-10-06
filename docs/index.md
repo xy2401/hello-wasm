@@ -14,7 +14,7 @@ hero:
       text: 理解执行模型
       link: /concepts/
     - theme: alt
-      text: 🧪 Playground
+      text: 🧪 浏览器运行时实验台
       link: /playground/
     - theme: alt
       text: 📦 运行时目录
@@ -57,9 +57,9 @@ Hello WASM 将文档和大型运行时资产放在同一套可追溯结构中。
 
 [运行时目录](/runtimes/)列出已记录版本、gzip 下载量、分片数量和校验信息。浏览器读取 manifest 后逐片校验 SHA-256，并验证页面指定的架构。历史 Shell 清单缺失的版本信息已明确标注。
 
-## Playground
+## 浏览器运行时实验台 {#playground}
 
-[Playground](/playground/)直接使用已经构建的 RISC-V 64 运行时。每个页面对应一份物理资产，页面负责下载、校验和启动；容器镜像仍由 GitHub Actions 构建，不在用户浏览器中临时打包。
+[浏览器运行时实验台](/playground/)直接使用已经构建的 RISC-V 64 运行时。每个页面对应一份物理资产，页面负责下载、校验和启动；容器镜像仍由 GitHub Actions 构建，不在用户浏览器中临时打包。
 
 同一物理资产可以呈现不同产品体验：例如 Java 与 Scala 读取同一份 JVM 资产，但进入各自页面时使用独立标题、命令和示例。这样既保留语言辨识度，也避免重复下载基础工具链。
 

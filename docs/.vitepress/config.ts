@@ -1,3 +1,4 @@
+import { sharedThemeLabels } from './shared-ui'
 import { defineConfig } from 'vitepress'
 import { fileURLToPath } from 'node:url'
 
@@ -14,6 +15,7 @@ export default defineConfig({
   head: [['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }]],
   vite: { configFile: fileURLToPath(new URL('../vite.config.ts', import.meta.url)) },
   themeConfig: {
+    ...sharedThemeLabels,
     logo: '/favicon.svg',
     nav: [
       { text: '基础概念', link: '/concepts/' },
@@ -21,13 +23,13 @@ export default defineConfig({
       { text: '工具链', link: '/toolchains/' },
       { text: 'container2wasm', link: '/container2wasm/' },
       { text: '📦 运行时', link: '/runtimes/' },
-      { text: '🧪 Playground', link: '/playground/' },
+      { text: '浏览器运行时实验台', link: '/playground/' },
     ],
     sidebar: {
       '/playground/': [
         {
-          text: 'Playground',
-          items: [{ text: '总览', link: '/playground/' }],
+          text: '实验台',
+          items: [{ text: '浏览器运行时实验台', link: '/playground/' }],
         },
         {
           text: 'Lang',
@@ -54,12 +56,12 @@ export default defineConfig({
             { text: '工具链', link: '/toolchains/' },
             { text: 'container2wasm', link: '/container2wasm/' },
             { text: '运行时目录', link: '/runtimes/' },
-            { text: 'Playground', link: '/playground/' },
+            { text: '浏览器运行时实验台', link: '/playground/' },
           ],
         },
       ],
     },
-    outline: false,
+    outline: { level: [2, 3], label: '本页目录' },
     lastUpdated: { text: '最后更新' },
     docFooter: { prev: '上一篇', next: '下一篇' },
     footer: {
@@ -67,6 +69,5 @@ export default defineConfig({
       copyright: 'Copyright © 2026 Hello WASM',
     },
     socialLinks: [{ icon: 'github', link: 'https://github.com/xy2401/hello-wasm' }],
-    search: { provider: 'local' },
   },
 })
