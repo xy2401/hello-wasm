@@ -19,3 +19,4 @@ Cross-Origin-Embedder-Policy: require-corp
 
 页面打开时只读取小型 manifest。用户点击启动后才并发下载 gzip 分片，逐片校验 SHA-256，解压并重新组合为 WebAssembly 二进制。
 
+具体的清单字段、gzip 响应头、Worker 状态和故障排查见 [container2wasm 浏览器接入与排障](/container2wasm/browser-integration)。

@@ -26,6 +26,33 @@ export default defineConfig({
       { text: '浏览器运行时实验台', link: '/playground/' },
     ],
     sidebar: {
+      '/concepts/': [
+        { text: '基础概念', items: [
+          { text: 'WebAssembly 基础概念', link: '/concepts/' },
+          { text: '浏览器执行模型', link: '/concepts/browser-runtime' },
+        ] },
+      ],
+      '/wasi/': [
+        { text: 'WASI', items: [
+          { text: '总览', link: '/wasi/' },
+        ] },
+      ],
+      '/toolchains/': [
+        { text: '工具链', items: [
+          { text: 'WebAssembly 工具链', link: '/toolchains/' },
+        ] },
+      ],
+      '/container2wasm/': [
+        { text: 'container2wasm', items: [
+          { text: '总览', link: '/container2wasm/' },
+          { text: '浏览器接入与排障', link: '/container2wasm/browser-integration' },
+        ] },
+      ],
+      '/runtimes/': [
+        { text: '运行时', items: [
+          { text: '运行时目录', link: '/runtimes/' },
+        ] },
+      ],
       '/playground/': [
         {
           text: '实验台',
@@ -42,21 +69,6 @@ export default defineConfig({
             { text: 'Rust', link: '/playground/rust' },
             { text: 'PHP', link: '/playground/php' },
             { text: 'Ruby', link: '/playground/ruby' },
-          ],
-        },
-      ],
-      '/': [
-        {
-          text: 'WebAssembly 手册',
-          items: [
-            { text: '手册总览', link: '/' },
-            { text: '基础概念', link: '/concepts/' },
-            { text: '浏览器执行模型', link: '/concepts/browser-runtime' },
-            { text: 'WASI', link: '/wasi/' },
-            { text: '工具链', link: '/toolchains/' },
-            { text: 'container2wasm', link: '/container2wasm/' },
-            { text: '运行时目录', link: '/runtimes/' },
-            { text: '浏览器运行时实验台', link: '/playground/' },
           ],
         },
       ],

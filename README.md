@@ -13,6 +13,12 @@ Lang 运行时通过 `build-lang-runtimes` 工作流手动构建。15 个可运�
 
 生成的 gzip 分片保存在 `docs/public/runtime/`，由 Cloudflare Pages 作为普通静态文件发布。两个工作流都只支持 `workflow_dispatch`，不会自动构建。
 
+## 文档入口
+
+- [container2wasm 总览](docs/container2wasm/index.md)：构建链、架构选择与镜像原则。
+- [浏览器接入与排障](docs/container2wasm/browser-integration.md)：分片校验、Worker/PTY、跨域隔离与复用步骤。
+- [运行时目录](docs/runtimes/index.md)：实际版本、下载体积与资产来源。
+
 ## Shell 资产维护
 
 - 镜像配置：`runtimes/shell/{base,multi,powershell}/Dockerfile`。

@@ -44,6 +44,7 @@ features:
 | [WASI](/wasi/) | WebAssembly 如何获得受限的系统能力 |
 | [工具链](/toolchains/) | Emscripten、wasi-sdk 与相关构建工具分别负责什么 |
 | [container2wasm](/container2wasm/) | Linux 容器如何转换为可在浏览器启动的 RISC-V 64 虚拟机 |
+| [container2wasm 浏览器接入与排障](/container2wasm/browser-integration) | 分片加载、Worker/PTY、跨域隔离与运行错误如何处理 |
 
 ## 运行时体系
 
