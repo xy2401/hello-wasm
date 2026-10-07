@@ -150,7 +150,7 @@ Cross-Origin-Resource-Policy: cross-origin
 3. 资产通过检查并发布后，再接入产品页面；产品页面保留身份、架构、哈希与错误检查。
 4. 产品站维护终端组件、匹配的引擎适配、隔离头和实验素材；先明确离线运行或外部服务的边界。
 
-Shell 的 `VITE_WASM_RUNTIME_BASE` 指向共享服务的 `/runtime`。独立启动 Hello WASM 时默认使用 `http://127.0.0.1:5177/runtime`；从 group-hello 根启动器启动时使用根 `config.json` 中 Hello WASM 的端口，当前为 `http://127.0.0.1:24044/runtime`。修改该构建环境变量后需重启接入站点。
+Shell 的 `VITE_WASM_RUNTIME_BASE` 指向 Hello WASM 服务的 `/runtime`。在 hello-wasm 仓库根目录运行 `npm run docs:dev`，默认服务地址为 `http://127.0.0.1:5177/runtime`。接入站点根据实际服务地址设置该环境变量；修改后需重启接入站点。
 
 ## 常见故障
 
