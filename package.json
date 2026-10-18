@@ -7,9 +7,9 @@
     "node": "^20.19.0 || >=22.16.0"
   },
   "scripts": {
-    "docs:dev": "vitepress dev docs --host 127.0.0.1 --port 5177 --strictPort",
+    "docs:dev": "vitepress dev docs --host 127.0.0.1 --port 24044 --strictPort",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs --host 127.0.0.1 --port 5177 --strictPort",
+    "docs:preview": "vitepress preview docs --host 127.0.0.1 --port 24044 --strictPort",
     "report:runtimes": "node scripts/report-runtime-sizes.js",
     "check:runtimes": "node scripts/check-runtimes.js",
     "check": "npm run check:runtimes && npm run docs:build"

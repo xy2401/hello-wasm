@@ -7,7 +7,7 @@ npm install
 npm run docs:dev
 ```
 
-本地地址：<http://127.0.0.1:5177/>。
+本地地址：<http://127.0.0.1:24044/>。
 
 Lang 运行时通过 `build-lang-runtimes` 工作流手动构建。15 个可运行产品映射到 JVM、Node 和六套独立工具链，共 8 份 RISC-V 64 物理资产。Shell 使用 `build-shell-runtimes`：`base`、`multi` 为 RISC-V 64，`powershell` 保留 AMD64；三个 Shell 页面读取共享清单与分片。
 
@@ -27,4 +27,4 @@ Lang 运行时通过 `build-lang-runtimes` 工作流手动构建。15 个可运�
 - 更新目录尺寸：`node scripts/report-runtime-sizes.js --shell --write`；仅更新 Shell 表格。
 - 小数据测试：`node --test scripts/test-package-runtime.mjs`。
 
-现有 Shell 分片已迁入，未重新编译；历史清单没有实际工具版本，详情见 `provenance`。本地联调时启动本站，再在 Shell 设置 `VITE_WASM_RUNTIME_BASE=http://127.0.0.1:5177/runtime`。公共站新增资产须先发布，随后发布 Shell 的共享加载入口。
+现有 Shell 分片已迁入，未重新编译；历史清单没有实际工具版本，详情见 `provenance`。本地联调时启动本站，再在 Shell 设置 `VITE_WASM_RUNTIME_BASE=http://127.0.0.1:24044/runtime`。公共站新增资产须先发布，随后发布 Shell 的共享加载入口。

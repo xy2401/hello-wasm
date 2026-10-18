@@ -23,9 +23,21 @@ export default defineConfig({
       { text: '工具链', link: '/toolchains/' },
       { text: 'container2wasm', link: '/container2wasm/' },
       { text: '📦 运行时', link: '/runtimes/' },
-      { text: '浏览器运行时实验台', link: '/playground/' },
+      { text: '🧪 实验台', link: '/playground/' },
+      { text: '⚖️ 对比矩阵', link: '/matrix/' },
+      { text: '📚 参考资料', link: '/reference/' },
     ],
     sidebar: {
+      '/matrix/': [
+        { text: '⚖️ 对比矩阵', items: [
+          { text: '⚖️ 对比矩阵', link: '/matrix/' },
+        ] },
+      ],
+      '/reference/': [
+        { text: '📚 参考资料', items: [
+          { text: '📚 参考资料', link: '/reference/' },
+        ] },
+      ],
       '/concepts/': [
         { text: '基础概念', items: [
           { text: 'WebAssembly 基础概念', link: '/concepts/' },
@@ -55,8 +67,8 @@ export default defineConfig({
       ],
       '/playground/': [
         {
-          text: '实验台',
-          items: [{ text: '浏览器运行时实验台', link: '/playground/' }],
+          text: '🧪 实验台',
+          items: [{ text: '🧪 实验台', link: '/playground/' }],
         },
         {
           text: 'Lang',
