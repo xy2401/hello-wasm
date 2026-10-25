@@ -11,7 +11,15 @@ npm run docs:dev
 
 Lang 运行时通过 `build-lang-runtimes` 工作流手动构建。15 个可运行产品映射到 JVM、Node 和六套独立工具链，共 8 份 RISC-V 64 物理资产。Shell 使用 `build-shell-runtimes`：`base`、`multi` 为 RISC-V 64，`powershell` 保留 AMD64；三个 Shell 页面读取共享清单与分片。
 
-生成的 gzip 分片保存在 `docs/public/runtime/`，由 Cloudflare Pages 作为普通静态文件发布。两个工作流都只支持 `workflow_dispatch`，不会自动构建。
+生成的 gzip 分片保存在 `docs/public/runtime/`，由 Cloudflare Workers Static Assets 作为普通静态文件发布。两个运行时工作流都只支持 `workflow_dispatch`，站点部署时只构建文档并发布已有分片。
+
+## Cloudflare Workers 部署
+
+仓库根目录的 [wrangler.jsonc](wrangler.jsonc) 声明了构建命令和静态资源目录。Wrangler 在部署阶段执行 `npm run docs:build`，随后发布 `docs/.vitepress/dist`；页面使用静态 HTML 路由和 VitePress 的 404 页面。
+
+在 Cloudflare Workers 中导入本仓库，Worker 名称使用 `hello-wasm`（与配置中的 `name` 一致），根目录使用仓库根目录，**构建命令留空**，部署命令保留默认的 `npx wrangler deploy`。构建环境使用 Node.js 22.16+，站点默认部署到域名根路径 `/`，无需设置 `DOCS_BASE`。
+
+构建命令由 Wrangler 执行，不依赖控制台自动填充构建命令字段。配置方式见 [Wrangler 自定义构建](https://developers.cloudflare.com/workers/wrangler/custom-builds/)和 [Workers 静态站点路由](https://developers.cloudflare.com/workers/static-assets/routing/static-site-generation/)。
 
 ## 文档入口
 
